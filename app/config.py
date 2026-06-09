@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-from pydantic import Field
+from pydantic import Field, model_validator
 from functools import lru_cache
 
 
@@ -30,8 +30,8 @@ class Settings(BaseSettings):
         description="OpenAI model to use for the agent and evaluation calls.",
     )
     EMBEDDING_MODEL: str = Field(
-        default="all-MiniLM-L6-v2",
-        description="Sentence-transformers embedding model.",
+        default="text-embedding-3-small",
+        description="OpenAI embedding model.",
     )
     EVAL_CONFIDENCE_THRESHOLD: float = Field(
         default=0.7,
@@ -50,6 +50,12 @@ class Settings(BaseSettings):
         default=8000,
         description="Port the server listens on.",
     )
+
+    @model_validator(mode="after")
+    def fix_postgres_url(self) -> "Settings":
+        if self.DATABASE_URL.startswith("postgres://"):
+            self.DATABASE_URL = self.DATABASE_URL.replace("postgres://", "postgresql://", 1)
+        return self
 
     class Config:
         env_file = ".env"

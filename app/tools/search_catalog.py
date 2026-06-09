@@ -51,11 +51,10 @@ class HybridCatalogSearcher:
         self.bm25 = BM25Okapi(tokenized_docs)
         logger.info("BM25 index built successfully")
 
-        logger.info(f"Loading embedding model: {settings.EMBEDDING_MODEL}")
-        from sentence_transformers import SentenceTransformer
-
-        self.encoder = SentenceTransformer(settings.EMBEDDING_MODEL)
-        logger.info("Embedding model loaded")
+        logger.info(f"Using OpenAI embeddings model: {settings.EMBEDDING_MODEL}")
+        from openai import OpenAI
+        self.openai_client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        logger.info("OpenAI client initialized for embeddings")
 
         logger.info(f"Initializing ChromaDB at {chroma_path}")
         import chromadb
@@ -140,7 +139,7 @@ class HybridCatalogSearcher:
         Returns:
             A ChromaDB collection ready for similarity search.
         """
-        collection_name = "catalog_embeddings"
+        collection_name = "catalog_embeddings_openai"
 
         try:
             existing_collection = self.chroma_client.get_collection(collection_name)
@@ -166,8 +165,12 @@ class HybridCatalogSearcher:
             metadata={"hnsw:space": "cosine"},  # Use cosine similarity (best for text)
         )
 
-        logger.info(f"Generating embeddings for {len(self.documents)} documents...")
-        embeddings = self.encoder.encode(self.doc_texts).tolist()
+        logger.info(f"Generating embeddings for {len(self.documents)} documents via OpenAI...")
+        response = self.openai_client.embeddings.create(
+            input=self.doc_texts,
+            model=settings.EMBEDDING_MODEL
+        )
+        embeddings = [item.embedding for item in response.data]
 
         collection.add(
             embeddings=embeddings,
@@ -223,7 +226,11 @@ class HybridCatalogSearcher:
 
         logger.debug(f"BM25 top results: {[doc_id for doc_id, _ in bm25_ranked[:3]]}")
 
-        query_embedding = self.encoder.encode([query]).tolist()
+        response = self.openai_client.embeddings.create(
+            input=[query],
+            model=settings.EMBEDDING_MODEL
+        )
+        query_embedding = [response.data[0].embedding]
 
         n_retrieve = min(len(self.documents), top_k * 2)
         semantic_results = self.collection.query(

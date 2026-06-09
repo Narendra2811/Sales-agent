@@ -68,7 +68,7 @@ Experience the magic of cross-session memory persistence using these two simple 
 The prospect introduces themselves and details their company parameters in session 1.
 
 ```bash
-curl -X POST https://your-app.railway.app/chat/demo_user \
+curl -X POST https://sales-agent-production-2253.up.railway.app/chat/demo_user \
   -H "Content-Type: application/json" \
   -d '{"message": "Hi! We are a 50-person fintech company considering Enterprise. Our CTO will make the final call."}'
 ```
@@ -80,7 +80,7 @@ curl -X POST https://your-app.railway.app/chat/demo_user \
 The user returns, starting a completely fresh request, and asks a context-dependent question.
 
 ```bash
-curl -X POST https://your-app.railway.app/chat/demo_user \
+curl -X POST https://sales-agent-production-2253.up.railway.app/chat/demo_user \
   -H "Content-Type: application/json" \
   -d '{"message": "Does the plan we discussed include audit logs?"}'
 ```
@@ -104,6 +104,8 @@ SaaSify provides a clean, well-structured REST API built with FastAPI.
 | `GET`    | `/docs`                   | Open interactive Swagger UI documentation.                                 |
 
 ---
+
+## **Live URL:** `https://sales-agent-production-2253.up.railway.app`
 
 ## 🚀 Getting Started
 
@@ -158,7 +160,8 @@ SaaSify comes pre-configured with a production-grade `Dockerfile` for seamless d
     - `OPENAI_API_KEY` = `your-api-key`
     - `DATABASE_URL` = `sqlite:///./sales_agent.db` (or a persistent volume/Postgres URL)
 4.  Railway will automatically detect the Dockerfile, build, and deploy the service.
-5.  Update the `Live URL` placeholder in this README with your Railway project domain!
+5.  Your deployed app is available at:
+    - **Live URL:** `https://sales-agent-production-2253.up.railway.app`
 
 ---
 

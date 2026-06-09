@@ -32,17 +32,11 @@ LABEL maintainer="SaaSify Engineering"
 LABEL description="SaaSify Sales Assistant Agent API"
 LABEL version="1.0.0"
 
-# ── Environment Variables ─────────────────────────────────────────────────────
-# PYTHONDONTWRITEBYTECODE: Don't create .pyc cache files (saves disk space)
-# PYTHONUNBUFFERED: Print logs immediately (don't buffer stdout)
-#   Without this, logs appear delayed or not at all in Railway's log viewer
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    # Tell sentence-transformers where to cache downloaded models
-    TRANSFORMERS_CACHE=/app/.cache/transformers \
-    HF_HOME=/app/.cache/huggingface \
-    # Disable HuggingFace telemetry
-    TOKENIZERS_PARALLELISM=false
+    # Limit memory arena count to lower memory usage on glibc
+    MALLOC_ARENA_MAX=2
+
 
 # ── System Dependencies ───────────────────────────────────────────────────────
 # Some Python packages (like chromadb's C++ components) need build tools.
@@ -73,18 +67,10 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # ── Pre-download Embedding Model ──────────────────────────────────────────────
-# Download the sentence-transformers model into the image during BUILD time.
-# This means:
-#   ✓ No model download at container startup (faster cold start)
-#   ✓ Works offline (no internet needed at runtime)
-#   ✗ Image size increases by ~80MB
-#
-# The model is cached at /app/.cache/huggingface/
-RUN python -c "\
-from sentence_transformers import SentenceTransformer; \
-print('Downloading embedding model...'); \
-model = SentenceTransformer('all-MiniLM-L6-v2'); \
-print('Model downloaded successfully.')"
+# We now use OpenAI API embeddings (text-embedding-3-small) instead of a local model.
+# This saves ~1GB of RAM, prevents out-of-memory crashes on 512MB free tiers,
+# and reduces build times.
+
 
 # ── Copy Application Code ─────────────────────────────────────────────────────
 # Copy everything else (code changes don't invalidate the pip cache layer)
@@ -106,4 +92,5 @@ EXPOSE 8000
 #
 # ${PORT:-8000} = use the PORT env var if set, else default to 8000
 # Railway sets PORT automatically; local Docker uses 8000
-CMD sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"
+# PYTHONPATH=/app ensures alembic can import the app module
+CMD sh -c "PYTHONPATH=/app alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"

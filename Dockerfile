@@ -34,6 +34,8 @@ LABEL version="1.0.0"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
+    # Make the app package importable during runtime and Alembic startup
+    PYTHONPATH=/app \
     # Limit memory arena count to lower memory usage on glibc
     MALLOC_ARENA_MAX=2
 
@@ -81,9 +83,14 @@ COPY . .
 RUN mkdir -p /app/chroma_db /app/.cache
 
 # ── Expose Port ───────────────────────────────────────────────────────────────
-# Document that the container listens on port 8000
-# Railway overrides this with the PORT env var
-EXPOSE 8000
+# Document that the container listens on ports commonly used by Railway.
+# The actual port is controlled by the PORT environment variable.
+EXPOSE 8000 8080
+
+# ── Optional Docker healthcheck ────────────────────────────────────────────────
+# Helps container orchestrators detect when the app is ready to receive traffic.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s CMD \
+    curl -fsS http://127.0.0.1:${PORT:-8000}/health || exit 1
 
 # ── Startup Command ───────────────────────────────────────────────────────────
 # This runs when the container starts.

@@ -1,0 +1,153 @@
+{
+  "_comment": "This is the mock product catalog for SaaSify. The sales agent reads this file to answer questions about pricing and features. To add new plans or features, just edit this file — no code changes needed.",
+
+  "company": {
+    "name": "SaaSify",
+    "tagline": "The all-in-one B2B collaboration platform for growing teams",
+    "support_email": "support@saasify.io",
+    "sales_email": "sales@saasify.io",
+    "website": "https://saasify.io",
+    "founded": 2021,
+    "description": "SaaSify helps B2B teams collaborate, automate workflows, and scale operations — all in one place. Trusted by over 2,000 companies worldwide."
+  },
+
+  "plans": [
+    {
+      "name": "Starter",
+      "price": "$49/mo",
+      "annual_price": "$39/mo billed annually (save 20%)",
+      "max_users": 5,
+      "storage": "1GB",
+      "features": [
+        "Up to 5 users",
+        "API access with rate limiting (1000 req/day)",
+        "Email support with 48-hour response time",
+        "1GB cloud storage",
+        "Basic analytics dashboard",
+        "Standard third-party integrations (Slack, Gmail, Trello)",
+        "Mobile app access (iOS and Android)",
+        "99.5% uptime SLA"
+      ],
+      "not_included": [
+        "SSO (Single Sign-On)",
+        "Webhooks",
+        "Priority support",
+        "Audit logs",
+        "Custom SLA",
+        "Unlimited users",
+        "Advanced analytics",
+        "Custom roles and permissions"
+      ],
+      "best_for": "Solo founders and very small teams (1-5 people) just getting started who need core features at a low cost.",
+      "trial": "14-day free trial, no credit card required"
+    },
+    {
+      "name": "Growth",
+      "price": "$199/mo",
+      "annual_price": "$159/mo billed annually (save 20%)",
+      "max_users": 25,
+      "storage": "10GB",
+      "features": [
+        "Up to 25 users",
+        "API access with higher rate limits (10,000 req/day)",
+        "Webhooks for real-time event notifications",
+        "Priority support with 4-hour response time",
+        "10GB cloud storage",
+        "Advanced analytics with custom reports",
+        "All standard + premium integrations (Salesforce, HubSpot, Jira, etc.)",
+        "Mobile app access",
+        "Custom roles (up to 5 custom roles)",
+        "99.7% uptime SLA",
+        "Data export (CSV, JSON)"
+      ],
+      "not_included": [
+        "SSO (Single Sign-On)",
+        "Audit logs",
+        "Custom SLA",
+        "Unlimited users",
+        "Dedicated support manager"
+      ],
+      "best_for": "Growing teams (5-25 people) that need automation, webhooks, and collaboration features.",
+      "trial": "14-day free trial, no credit card required"
+    },
+    {
+      "name": "Enterprise",
+      "price": "$499/mo",
+      "annual_price": "$399/mo billed annually (save 20%)",
+      "max_users": "Unlimited",
+      "storage": "Unlimited",
+      "features": [
+        "Unlimited users",
+        "SSO with SAML 2.0 and OAuth 2.0 (Google, Okta, Azure AD)",
+        "Full audit logs with 1-year retention",
+        "99.9% uptime SLA with financial penalties",
+        "Dedicated support manager with 1-hour response time",
+        "Unlimited cloud storage",
+        "Custom analytics and white-label reporting",
+        "All integrations including custom API connectors",
+        "Unlimited custom roles and fine-grained permissions",
+        "Advanced security features (IP allowlisting, 2FA enforcement)",
+        "Custom contracts and invoicing",
+        "Onboarding assistance and training sessions",
+        "SOC 2 Type II compliance reports on request",
+        "GDPR and HIPAA compliant data handling",
+        "API access unlimited rate"
+      ],
+      "not_included": [],
+      "best_for": "Large organizations (25+ people) that require security, compliance, SSO, audit trails, and a dedicated support relationship.",
+      "trial": "30-day proof-of-concept available with dedicated setup support"
+    }
+  ],
+
+  "add_ons": [
+    {
+      "name": "Extra Storage",
+      "price": "$10/mo per 10GB",
+      "available_on": ["Starter", "Growth"]
+    },
+    {
+      "name": "Additional Users (Growth plan only)",
+      "price": "$8/user/mo for users beyond 25",
+      "available_on": ["Growth"]
+    },
+    {
+      "name": "Premium Integrations Pack",
+      "price": "$29/mo",
+      "description": "Access to Salesforce, HubSpot, Marketo, and Zendesk integrations",
+      "available_on": ["Starter"]
+    }
+  ],
+
+  "faqs": [
+    {
+      "question": "Can I upgrade or downgrade my plan?",
+      "answer": "Yes. Upgrades take effect immediately and you are billed the prorated difference. Downgrades take effect at the end of your current billing cycle."
+    },
+    {
+      "question": "Is there a free trial?",
+      "answer": "Yes. Starter and Growth come with a 14-day free trial. Enterprise offers a 30-day proof-of-concept. No credit card required."
+    },
+    {
+      "question": "What payment methods do you accept?",
+      "answer": "We accept Visa, Mastercard, American Express, and wire transfers. Annual Enterprise plans can be invoiced."
+    },
+    {
+      "question": "Do you offer nonprofit or startup discounts?",
+      "answer": "Yes. Registered nonprofits get 30% off any plan. Y Combinator and Techstars alumni get 25% off for the first year. Contact sales@saasify.io."
+    },
+    {
+      "question": "Where is my data stored?",
+      "answer": "Data is stored in AWS data centers in the US (us-east-1) by default. Enterprise customers can request EU data residency (eu-west-1) at no extra cost."
+    },
+    {
+      "question": "Does the Enterprise plan include SSO?",
+      "answer": "Yes. Enterprise includes SSO with SAML 2.0 and OAuth 2.0, supporting Google Workspace, Okta, Azure Active Directory, and any SAML-compliant identity provider."
+    },
+    {
+      "question": "What is the difference between audit logs and analytics?",
+      "answer": "Analytics shows aggregate usage trends (active users, feature usage, etc.). Audit logs show every action every user took — who did what and when — for compliance purposes. Audit logs are Enterprise only."
+    }
+  ],
+
+  "comparison_summary": "Starter ($49): small teams, core features. Growth ($199): up to 25 users, webhooks, priority support. Enterprise ($499): unlimited users, SSO, audit logs, SLA, dedicated support."
+}
